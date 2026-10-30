@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Environment
+.env
+.env.*
+!.env.example
+*/.env
+*/.env.*
+!*/.env.example
+
+# Build outputs
+client/dist/
+client/dist-ssr/
+client/.vite/
+server/.cache/
+*.tsbuildinfo
+
+# Uploads & generated files
+server/uploads/
+!server/uploads/.gitkeep
+server/.keys/
+*.pdf
+*.zip
+
+# Test output
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Misc
+tmp/
