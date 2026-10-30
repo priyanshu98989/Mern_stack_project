@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: certtrack-api
+    env: node
+    region: oregon
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    disk:
+      name: certtrack-data
+      mountPath: /opt/render/project/src/server/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: API_PREFIX
+        value: /api/v1
+      - key: TRUST_PROXY
+        value: "1"
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: none
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: CLIENT_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: SERVER_URL
+        sync: false
+      - key: ISSUER_URL
+        sync: false
+      - key: SIGNING_KEYS_DIR
+        value: ./data/.keys
+      - key: UPLOAD_DIR
+        value: ./data/uploads
+      - key: ENABLE_CRON
+        value: "true"
