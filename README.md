@@ -214,6 +214,11 @@ CI also runs linting, the client production build and server tests. See
 
 ## Deployment
 
+Live deployment:
+- Frontend (Vercel): https://mern-stack-project-blush.vercel.app
+- Backend (Render): https://certtrack-api.onrender.com
+
+Steps:
 1. Build the client with `VITE_API_URL` pointing at the public API origin.
 2. Serve `client/dist` from a static host and rewrite unknown paths to
    `index.html` for client-side routing.
