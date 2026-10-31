@@ -78,12 +78,13 @@ export default function Login() {
           {isSubmitting ? 'Signing in...' : 'Sign in'}
         </button>
       </form>
-      <a
+      {/* Google login disabled until OAuth credentials are configured */}
+{/* <a
         href={`${API_URL}/api/v1/auth/google`}
         className="mt-3 block text-center rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-2 text-sm"
       >
         Continue with Google
-      </a>
+      </a> */}
       <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
         <Link to="/forgot-password" className="text-brand-600">
           Forgot password?

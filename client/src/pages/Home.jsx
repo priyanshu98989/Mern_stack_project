@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ShieldCheck, Award, Users, Lock, FileCheck, Zap } from 'lucide-react';
 import Card from '../components/ui/Card';
+import ScrollAnimation from '../components/ScrollAnimation';
 
 const features = [
   {
@@ -48,6 +49,7 @@ const certTypes = [
 export default function Home() {
   return (
     <div className="space-y-12">
+      <ScrollAnimation />
       {/* Hero */}
       <motion.section
         initial={{ opacity: 0, y: 30 }}
