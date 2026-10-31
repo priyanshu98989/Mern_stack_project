@@ -13,19 +13,26 @@ async function start() {
   // Auto-seed demo users if DB is empty (for fresh deployments)
   try {
     const User = require('./models/User');
-    const count = await User.countDocuments();
-    if (count === 0) {
-      const demos = [
-        { name: 'CertTrack Admin', email: 'admin@certtrack.local', role: 'admin', password: 'Admin@12345', department: 'Administration' },
-        { name: 'Dr. Ramesh Iyer', email: 'hod.cse@certtrack.local', role: 'hod', password: 'Hod@12345', department: 'CSE' },
-        { name: 'Dr. Kavita Rao', email: 'faculty1@certtrack.local', role: 'faculty', password: 'Faculty@12345', department: 'CSE' },
-        { name: 'Demo Student', email: 'student1@certtrack.local', role: 'student', password: 'Student@12345', department: 'CSE' },
-      ];
-      for (const d of demos) {
+    const demos = [
+      { name: 'CertTrack Admin', email: 'admin@certtrack.local', role: 'admin', password: 'Admin@12345', department: 'Administration' },
+      { name: 'Dr. Ramesh Iyer', email: 'hod.cse@certtrack.local', role: 'hod', password: 'Hod@12345', department: 'CSE' },
+      { name: 'Dr. Kavita Rao', email: 'faculty1@certtrack.local', role: 'faculty', password: 'Faculty@12345', department: 'CSE' },
+      { name: 'Demo Student', email: 'student1@certtrack.local', role: 'student', password: 'Student@12345', department: 'CSE' },
+    ];
+    for (const d of demos) {
+      let u = await User.findOne({ email: d.email }).select('+password');
+      if (!u) {
         await User.create({ ...d, emailVerified: true, status: 'active' });
+      } else {
+        u.password = d.password;
+        u.failedLoginAttempts = 0;
+        u.lockUntil = null;
+        u.status = 'active';
+        u.emailVerified = true;
+        await u.save();
       }
-      logger.info('[seed] demo users created');
     }
+    logger.info('[seed] demo users upserted');
   } catch (err) {
     logger.warn({ err }, '[seed] auto-seed failed');
   }
