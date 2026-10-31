@@ -52,7 +52,19 @@ async function start() {
   } catch (err) {
     logger.warn({ err }, '[seed] auto-seed failed');
   }
-  const app = createApp();
+  // Fix QR codes pointing to localhost (regenerate with correct CLIENT_URL)
+  try {
+    const Certificate = require('./models/Certificate');
+    const { makeVerificationQr } = require('./services/qrService');
+    const certs = await Certificate.find({ qrCodeDataUrl: /localhost/ });
+    for (const cert of certs) {
+      cert.qrCodeDataUrl = await makeVerificationQr(cert.verificationId);
+      await cert.save();
+    }
+    if (certs.length) logger.info(`[qr] regenerated ${certs.length} QR codes`);
+  } catch (err) {
+    logger.warn({ err }, '[qr] regeneration failed');
+  }
   const server = http.createServer(app);
 
   const io = new Server(server, {

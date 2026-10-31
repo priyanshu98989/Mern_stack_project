@@ -2,7 +2,10 @@ const QRCode = require('qrcode');
 const env = require('../config/env');
 
 async function makeVerificationQr(verificationId) {
-  const url = `${env.CLIENT_URL}/verify/${encodeURIComponent(verificationId)}`;
+  let base = env.CLIENT_URL;
+  if (!base || /localhost/.test(base)) base = 'https://mern-stack-project-blush.vercel.app';
+  const url = `${base}/verify/${encodeURIComponent(verificationId)}`;
+  return QRCode.toDataURL(url, {
   return QRCode.toDataURL(url, {
     errorCorrectionLevel: 'M',
     margin: 1,
