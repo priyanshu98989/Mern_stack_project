@@ -13,6 +13,22 @@ async function start() {
   // Auto-seed demo users if DB is empty (for fresh deployments)
   try {
     const User = require('./models/User');
+    const Platform = require('./models/Platform');
+    const pCount = await Platform.countDocuments();
+    if (pCount === 0) {
+      const PLATFORMS = [
+        { name: 'NPTEL', slug: 'nptel', domains: ['nptel.ac.in'], website: 'https://nptel.ac.in' },
+        { name: 'Coursera', slug: 'coursera', domains: ['coursera.org'], website: 'https://coursera.org' },
+        { name: 'Udemy', slug: 'udemy', domains: ['udemy.com'], website: 'https://udemy.com' },
+        { name: 'edX', slug: 'edx', domains: ['edx.org'], website: 'https://edx.org' },
+        { name: 'Swayam', slug: 'swayam', domains: ['swayam.gov.in'], website: 'https://swayam.gov.in' },
+        { name: 'Google', slug: 'google', domains: ['google.com', 'cloud.google.com'], website: 'https://grow.google' },
+        { name: 'AWS', slug: 'aws', domains: ['aws.amazon.com'], website: 'https://aws.amazon.com' },
+        { name: 'IBM', slug: 'ibm', domains: ['ibm.com'], website: 'https://ibm.com' },
+      ];
+      await Platform.insertMany(PLATFORMS);
+      logger.info('[seed] platforms created');
+    }
     const demos = [
       { name: 'CertTrack Admin', email: 'admin@certtrack.local', role: 'admin', password: 'Admin@12345', department: 'Administration' },
       { name: 'Dr. Ramesh Iyer', email: 'hod.cse@certtrack.local', role: 'hod', password: 'Hod@12345', department: 'CSE' },
