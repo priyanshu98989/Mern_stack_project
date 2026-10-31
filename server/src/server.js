@@ -10,6 +10,25 @@ const slaReminder = require('./jobs/slaReminder');
 
 async function start() {
   await connectDB();
+  // Auto-seed demo users if DB is empty (for fresh deployments)
+  try {
+    const User = require('./models/User');
+    const count = await User.countDocuments();
+    if (count === 0) {
+      const demos = [
+        { name: 'CertTrack Admin', email: 'admin@certtrack.local', role: 'admin', password: 'Admin@12345', department: 'Administration' },
+        { name: 'Dr. Ramesh Iyer', email: 'hod.cse@certtrack.local', role: 'hod', password: 'Hod@12345', department: 'CSE' },
+        { name: 'Dr. Kavita Rao', email: 'faculty1@certtrack.local', role: 'faculty', password: 'Faculty@12345', department: 'CSE' },
+        { name: 'Demo Student', email: 'student1@certtrack.local', role: 'student', password: 'Student@12345', department: 'CSE' },
+      ];
+      for (const d of demos) {
+        await User.create({ ...d, emailVerified: true, status: 'active' });
+      }
+      logger.info('[seed] demo users created');
+    }
+  } catch (err) {
+    logger.warn({ err }, '[seed] auto-seed failed');
+  }
   const app = createApp();
   const server = http.createServer(app);
 
