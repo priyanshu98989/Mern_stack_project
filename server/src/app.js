@@ -48,7 +48,13 @@ function createApp() {
   app.use(
     cors({
       origin(origin, callback) {
-        if (!origin || env.CORS_ORIGINS.includes(origin)) return callback(null, true);
+        const allowed = [
+          'http://localhost:5173',
+          'http://localhost:3000',
+          'https://mern-stack-project-blush.vercel.app',
+          ...(env.CORS_ORIGINS || []),
+        ];
+        if (!origin || allowed.includes(origin)) return callback(null, true);
         return callback(new ApiError(403, 'CORS_FORBIDDEN', `Origin ${origin} is not allowed`));
       },
       credentials: true,
